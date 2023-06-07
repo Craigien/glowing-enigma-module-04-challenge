@@ -14,30 +14,36 @@
 
     <main>
         <!-- Welcome screen -->
-        <section>
+        <section id="welcome">
             <h2>Welcome to the Quiz!</h2>
             <p id="quiz-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio quidem sed nisi error facilis alias.</p>
+            <button id="start-button">Start Quiz</button>
             <div id="high-scores">View Highscores</div>
         </section>
 
+        <!-- Timer -->
+        <section id="timer">
+            <div id="time-left"></div>
+        </section>
+
         <!-- Questions -->
-        <section>
+        <section id="questions">
             <div id="question"></div>
                 <ul></ul>
             </div>
         </section>
 
-        <!-- Submit initials and score -->
-        <section>
+        <!-- View highscores -->
+        <section id="highscores">
             <div id="initials"></div>
-            <div id="score"></div>
+            <div id="scores"></div>
         </section>
 
-        <!-- Highscores -->
-        <section>
-            <div id="scores"></div>
-            <form id="scores-form">
-                <input id="score-input">
+        <!-- Enter initials and score -->
+        <section id="initials-and-score">
+            <div id="score"></div>
+            <form id="initial-form">
+                <input text="Please input initials" id="initial-input">
                 <button id="submit">Submit</button>
             </form>
         </section>
