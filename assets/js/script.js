@@ -93,6 +93,7 @@ function startQuiz()
     win = false;
     timeLeft = 10;
     timerEl.textContent = timeLeft;
+    welcomeMessageEl.hidden = true;
     startTimer();
     displayQuestions();
 }
