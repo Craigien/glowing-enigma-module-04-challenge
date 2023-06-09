@@ -16,7 +16,7 @@ var questions = {
     4: ["Text5", "Option1", "Option2", "Option3", "Option4"]
 };
 
-var answers = ["answer1", "answer1", "answer1", "answer1", "answer1"];
+var answers = ["Option1", "Option1", "Option1", "Option1", "Option1"];
 
 var options = {
     1: document.querySelector("#option1"),
@@ -27,15 +27,29 @@ var options = {
 
 var timer;
 var timeLeft = 0;
-var win = false;
+// var win = false;
 var score;
 
-/*
-function init()
+// Tracks which question user is on
+var questionCount;
+
+function quizComplete()
 {
-    
+    // Message congradulations on completing the quiz
+
+    // timeLeft = 0;
+
+    // Input initials
+
+    // Add initials and score to local storage
 }
-*/
+
+function noTimeLeft()
+{
+    // Message sorry you ran out of time
+
+    quizComplete();
+}
 
 function startTimer()
 {
@@ -49,14 +63,19 @@ function startTimer()
             if (complete && timeLeft > 0)
             {
                 clearInterval(timer);
-                // finishedQuiz();
+                // quizComplete;
             }
         }
         */
-        if (timeLeft === 0)
+        if (timeLeft << 0)
+        {
+            timeLeft = 0;
+        }
+
+        if (timeLeft <<= 0)
         {
             clearInterval(timer);
-            // noTimeLeft();
+            noTimeLeft();
         }
     }, 1000);
 }
@@ -65,47 +84,100 @@ function answerSelection()
 {
     // Check answer
 
-    var selection;
+    // Correct answer for current question
+    var correctAnswer = answers[questionCount];
 
     options[1].addEventListener("click", function()
         {
+            // See if first option is correct answer
+            if (questions[questionCount][1] === correctAnswer)
+            {
+                score++;
+                // Display correct prompt
+            }
+            else
+            {
+                timeLeft -= 20;
+                // Display incorrect prompt
+            }
+
             console.log("Clicked: 1");
     
-            selection = 1;
+            questionCount++;
 
-            score++;
+            clearQuestion();
 
-            return;
+            displayQuestions();
         });
 
         options[2].addEventListener("click", function()
         {
+            // See if first option is correct answer
+            if (questions[questionCount][2] === correctAnswer)
+            {
+                score++;
+                // Display correct prompt
+            }
+            else
+            {
+                timeLeft -= 20;
+                // Display incorrect prompt
+            }
+
             console.log("Clicked: 2");
     
-            selection = 2;
+            questionCount++;
 
-            return;
+            clearQuestion();
+
+            displayQuestions();
         });
 
         options[3].addEventListener("click", function()
         {
-            console.log("Clicked: 3");
-    
-            selection = 3;
+            // See if first option is correct answer
+            if (questions[questionCount][3] === correctAnswer)
+            {
+                score++;
+                // Display correct prompt
+            }
+            else
+            {
+                timeLeft -= 20;
+                // Display incorrect prompt
+            }
 
-            return;
+            console.log("Clicked: 3");
+
+            questionCount++;
+
+            clearQuestion();
+
+            displayQuestions();
         });
 
         options[4].addEventListener("click", function()
         {
+            // See if first option is correct answer
+            if (questions[questionCount][4] === correctAnswer)
+            {
+                score++;
+                // Display correct prompt
+            }
+            else
+            {
+                timeLeft -= 20;
+                // Display incorrect prompt
+            }
+
             console.log("Clicked: 4");
-    
-            selection = 4;
 
-            return;
+            questionCount++;
+
+            clearQuestion();
+
+            displayQuestions();
         });
-
-    return;
 }
 
 function clearQuestion()
@@ -120,6 +192,36 @@ function clearQuestion()
 
 function displayQuestions()
 {
+    if (questionCount >= Object.keys(questions).length)
+    {
+        console.log(questionCount);
+        console.log("Quiz complete");
+        clearQuestion();
+
+        // quizComplete();
+        return;
+    }
+
+    else
+    {
+        console.log(questionCount);
+
+        // Targets first div
+        questionsContainerEl.children[0].textContent = questions[questionCount][0];
+
+        for (var j = 1; j < Object.keys(options).length + 1; j++)
+        {
+            console.log(options[j]);
+
+            var answer = options[j];
+
+            answer.textContent = questions[questionCount][j];
+        }
+    }
+
+    return;
+    
+    /*
     // Object.keys(questions).length
     for (var i = 0; i < 1; i++)
     {
@@ -139,23 +241,25 @@ function displayQuestions()
 
         answerSelection();
     }
+    */
 }
 
 function startQuiz()
 {
-    win = false;
+    // win = false;
     score = 0;
-    timeLeft = 10;
+    timeLeft = 300;
     timerEl.textContent = timeLeft;
     welcomeMessageEl.hidden = true;
 
+    questionCount = 0;
+
     startTimer();
     displayQuestions();
+    answerSelection();
 }
 
 startButtonEl.addEventListener("click", startQuiz);
-
-// init();
 
 /*
     var flag;
