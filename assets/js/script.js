@@ -5,6 +5,8 @@ var questionsFormEl = document.querySelector("#questions");
 var questionsContainerEl = document.querySelector("#questions-container");
 var highScoresEl = document.querySelector("#highscores");
 var initialsAndScoreEl = document.querySelector("#initials-and-score");
+var initialsFormEl = document.querySelector("#initials-form");
+var initialsInputEl = document.querySelector("#initials-input");
 var timerEl = document.querySelector("#timer");
 var startButtonEl = document.querySelector("#start-button");
 
@@ -42,6 +44,23 @@ function init()
     startButtonEl.addEventListener("click", startQuiz);
 }
 
+// Get quizes count
+
+function getQuizCount()
+{
+    var lastQuiz = JSON.parse(localStorage.getItem("Initials and Score"));
+    
+    if (lastQuiz === null)
+    {
+        return 0;
+    }
+
+    else
+    {
+        return lastQuiz.quizCount;
+    }
+}
+
 // Clear the timer and save initials and score to local storage
 function saveResults()
 {
@@ -49,9 +68,28 @@ function saveResults()
 
     timerEl.textContent = "";
 
-    // Input initials
+    // Make form visible
+    initialsAndScoreEl.hidden = false;
 
     // Add initials and score to local storage
+    initialsFormEl.addEventListener("submit", function(event)
+    {
+        event.preventDefault();
+
+        var quizCount = getQuizCount();
+
+        var initialsAndScore = {
+            initials: initialsInputEl.value.trim(),
+            score: score,
+            quizCount: quizCount
+        };
+
+        localStorage.setItem("Initials and Score " + quizCount, JSON.stringify(initialsAndScore));
+
+        initialsAndScoreEl.hidden = true;
+
+        welcomeMessageEl.hidden = false;
+    });
 }
 
 // User completed quiz
@@ -77,21 +115,11 @@ function startTimer()
     {
         timeLeft--;
         timerEl.textContent = timeLeft;
-        /*
-        if (timeLeft >= 0)
-        {
-            if (complete && timeLeft > 0)
-            {
-                clearInterval(timer);
-                // quizComplete;
-            }
-        }
-        */
-        
+       
         if (timeLeft <= 0)
         {
-            timeLeft = 0;
             clearInterval(timer);
+            timeLeft = 0;
             noTimeLeft();
         }
     }, 1000);
@@ -220,6 +248,7 @@ function displayQuestions()
     if (questionCount >= Object.keys(questions).length)
     {
         console.log("Quiz complete");
+        console.log("Score " + score);
         clearQuestion();
         quizComplete();
         return;
@@ -230,13 +259,13 @@ function displayQuestions()
         // Targets first div
         questionsContainerEl.children[0].textContent = questions[questionCount][0];
 
-        for (var j = 1; j < Object.keys(options).length + 1; j++)
+        for (var i = 1; i < Object.keys(options).length + 1; i++)
         {
-            console.log(options[j]);
+            console.log(options[i]);
 
-            var answer = options[j];
+            var answer = options[i];
 
-            answer.textContent = questions[questionCount][j];
+            answer.textContent = questions[questionCount][i];
         }
 
         return;
@@ -250,7 +279,6 @@ function startQuiz()
     timeLeft = 300;
     timerEl.textContent = timeLeft;
     welcomeMessageEl.hidden = true;
-
     questionCount = 0;
 
     startTimer();
@@ -259,3 +287,9 @@ function startQuiz()
 }
 
 init();
+
+/* Current issues
+
+After initial quiz, second quiz is skipping questions
+
+*/
