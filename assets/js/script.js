@@ -27,23 +27,42 @@ var options = {
 
 var timer;
 var timeLeft = 0;
-// var win = false;
 var score;
-
 // Tracks which question user is on
 var questionCount;
+// Tracks the correct answer to the current question
+var correctAnswer;
 
-function quizComplete()
+// Hides the form and creates an event listener for the start quiz button
+function init()
 {
-    // Message congradulations on completing the quiz
+    initialsAndScoreEl.hidden = true;
 
-    // timeLeft = 0;
+    // Runs start quiz function when user clicks start quiz button
+    startButtonEl.addEventListener("click", startQuiz);
+}
+
+// Clear the timer and save initials and score to local storage
+function saveResults()
+{
+    clearInterval(timer);
+
+    timerEl.textContent = "";
 
     // Input initials
 
     // Add initials and score to local storage
 }
 
+// User completed quiz
+function quizComplete()
+{
+    // Message congradulations on completing the quiz
+
+    saveResults();
+}
+
+// User ran out of time
 function noTimeLeft()
 {
     // Message sorry you ran out of time
@@ -51,6 +70,7 @@ function noTimeLeft()
     quizComplete();
 }
 
+// Timer that runs during the quiz
 function startTimer()
 {
     timer = setInterval(function()
@@ -67,25 +87,20 @@ function startTimer()
             }
         }
         */
-        if (timeLeft << 0)
+        
+        if (timeLeft <= 0)
         {
             timeLeft = 0;
-        }
-
-        if (timeLeft <<= 0)
-        {
             clearInterval(timer);
             noTimeLeft();
         }
     }, 1000);
 }
 
+// Event listeners to listen for clicks on multiple choice answer options
 function answerSelection()
 {
     // Check answer
-
-    // Correct answer for current question
-    var correctAnswer = answers[questionCount];
 
     options[1].addEventListener("click", function()
         {
@@ -93,7 +108,9 @@ function answerSelection()
             if (questions[questionCount][1] === correctAnswer)
             {
                 score++;
+                console.log("score: " + score);
                 // Display correct prompt
+                // Can do this with setInterval and add text to p element and then remove after interval reaches 3 seconds
             }
             else
             {
@@ -116,6 +133,7 @@ function answerSelection()
             if (questions[questionCount][2] === correctAnswer)
             {
                 score++;
+                console.log("score: " + score);
                 // Display correct prompt
             }
             else
@@ -139,6 +157,7 @@ function answerSelection()
             if (questions[questionCount][3] === correctAnswer)
             {
                 score++;
+                console.log("score: " + score);
                 // Display correct prompt
             }
             else
@@ -162,6 +181,7 @@ function answerSelection()
             if (questions[questionCount][4] === correctAnswer)
             {
                 score++;
+                console.log("score: " + score);
                 // Display correct prompt
             }
             else
@@ -180,6 +200,7 @@ function answerSelection()
         });
 }
 
+// Removes text of current question
 function clearQuestion()
 {
     questionsContainerEl.children[0].textContent = "";
@@ -190,22 +211,22 @@ function clearQuestion()
     }
 }
 
+// Displays next question and ends quiz when all questions are answered
 function displayQuestions()
 {
+    // Correct answer for current question
+    correctAnswer = answers[questionCount];
+
     if (questionCount >= Object.keys(questions).length)
     {
-        console.log(questionCount);
         console.log("Quiz complete");
         clearQuestion();
-
-        // quizComplete();
+        quizComplete();
         return;
     }
 
     else
     {
-        console.log(questionCount);
-
         // Targets first div
         questionsContainerEl.children[0].textContent = questions[questionCount][0];
 
@@ -217,36 +238,14 @@ function displayQuestions()
 
             answer.textContent = questions[questionCount][j];
         }
+
+        return;
     }
-
-    return;
-    
-    /*
-    // Object.keys(questions).length
-    for (var i = 0; i < 1; i++)
-    {
-        // Targets first div
-        questionsContainerEl.children[0].textContent = questions[i][0];
-
-        for (var j = 1; j < Object.keys(options).length + 1; j++)
-        {
-            console.log(options[j]);
-
-            var answer = options[j];
-
-            answer.textContent = questions[i][j];
-        }
-
-        // Need to wait for user click before iterating outside for loop
-
-        answerSelection();
-    }
-    */
 }
 
+// Starts quiz
 function startQuiz()
 {
-    // win = false;
     score = 0;
     timeLeft = 300;
     timerEl.textContent = timeLeft;
@@ -259,117 +258,4 @@ function startQuiz()
     answerSelection();
 }
 
-startButtonEl.addEventListener("click", startQuiz);
-
-/*
-    var flag;
-    
-    options[1].addEventListener("click", function()
-    {
-        flag = true;
-
-        console.log("Clicked");
-
-        if (flag)
-        {
-            // Add score
-            score++;
-            console.log("Score: " + score);
-            // clearQuestion();
-        }
-
-        
-        if (!flag)
-        {
-            // Subtract time
-            timeLeft--;
-            console.log("Score: " + score);
-            // clearQuestion();
-        }
-        
-
-        return true;
-    });
-    */
-
-// Wait for user click to continue
-
-        // var waitFlag = true;
-        
-        // var continueFlag = answerSelection();
-
-
-
-
-
-        /*
-        var selection = 0;
-
-        options[1].addEventListener("click", function()
-        {
-            console.log("Clicked: 1");
-    
-            selection = 1;
-
-            
-            score++;
-
-            clearQuestion();
-            
-
-            // return;
-        });
-
-        options[2].addEventListener("click", function()
-        {
-            console.log("Clicked: 2");
-    
-            selection = 2;
-
-            // return;
-        });
-
-        options[3].addEventListener("click", function()
-        {
-            console.log("Clicked: 3");
-    
-            selection = 3;
-
-            // return;
-        });
-
-        options[4].addEventListener("click", function()
-        {
-            console.log("Clicked: 4");
-    
-            selection = 4;
-
-            // return;
-        });
-        */
-        
-/*
-        if (selection === 1)
-        {
-            score++;
-            console.log("Score: " + score);
-            clearQuestion();
-        }
-        if (selection !== 1)
-        {
-            timeLeft--;
-            console.log("Score: " + score);
-            clearQuestion();
-        }
-*/
-
-        /*
-        do
-        {
-            if (continueFlag)
-            {
-                waitFlag = false;
-            }
-        }
-        while (waitFlag);
-        */
+init();
