@@ -2,17 +2,18 @@
 
 var welcomeMessageEl = document.querySelector("#welcome");
 var questionsFormEl = document.querySelector("#questions");
+var questionsContainerEl = document.querySelector("#questions-container");
 var highScoresEl = document.querySelector("#highscores");
 var initialsAndScoreEl = document.querySelector("#initials-and-score");
 var timerEl = document.querySelector("#timer");
 var startButtonEl = document.querySelector("#start-button");
 
 var questions = {
-    0: ["Text1", "Answer1", "Answer2", "Answer3", "Answer4"],
-    1: ["Text2", "Answer1", "Answer2", "Answer3", "Answer4"],
-    2: ["Text3", "Answer1", "Answer2", "Answer3", "Answer4"],
-    3: ["Text4", "Answer1", "Answer2", "Answer3", "Answer4"],
-    4: ["Text5", "Answer1", "Answer2", "Answer3", "Answer4"]
+    0: ["Text1", "Option1", "Option2", "Option3", "Option4"],
+    1: ["Text2", "Option1", "Option2", "Option3", "Option4"],
+    2: ["Text3", "Option1", "Option2", "Option3", "Option4"],
+    3: ["Text4", "Option1", "Option2", "Option3", "Option4"],
+    4: ["Text5", "Option1", "Option2", "Option3", "Option4"]
 };
 
 var answers = ["answer1", "answer1", "answer1", "answer1", "answer1"];
@@ -29,10 +30,12 @@ var timeLeft = 0;
 var win = false;
 var score;
 
+/*
 function init()
 {
     
 }
+*/
 
 function startTimer()
 {
@@ -62,50 +65,68 @@ function answerSelection()
 {
     // Check answer
 
+    var selection;
 
-
-    /*
     options[1].addEventListener("click", function()
-    {
-        return true;
-    });
+        {
+            console.log("Clicked: 1");
+    
+            selection = 1;
 
-    options[2].addEventListener("click", function()
-    {
-        return false;
-    });
+            score++;
 
-    options[3].addEventListener("click", function()
-    {
-        return false;
-    });
+            return;
+        });
 
-    options[4].addEventListener("click", function()
-    {
-        return false;
-    });
-    */
+        options[2].addEventListener("click", function()
+        {
+            console.log("Clicked: 2");
+    
+            selection = 2;
+
+            return;
+        });
+
+        options[3].addEventListener("click", function()
+        {
+            console.log("Clicked: 3");
+    
+            selection = 3;
+
+            return;
+        });
+
+        options[4].addEventListener("click", function()
+        {
+            console.log("Clicked: 4");
+    
+            selection = 4;
+
+            return;
+        });
+
+    return;
 }
 
 function clearQuestion()
 {
-    questionsFormEl.children[0].textContent = "";
-
-    do
+    questionsContainerEl.children[0].textContent = "";
+    
+    for (var i = 1; i < Object.keys(questions).length; i++)
     {
-        questionsFormEl.children[1].removeChild(questionsFormEl.children[1].firstChild)
+        options[i].textContent = "";
     }
-    while (questionsFormEl.children[1].firstChild);
 }
 
 function displayQuestions()
 {
+    // Object.keys(questions).length
     for (var i = 0; i < 1; i++)
     {
         // Targets first div
-        questionsFormEl.children[0].textContent = questions[i][0];
+        questionsContainerEl.children[0].textContent = questions[i][0];
 
-        for (var j = 1; j < 5; j++)
+        for (var j = 1; j < Object.keys(options).length + 1; j++)
         {
             console.log(options[j]);
 
@@ -114,23 +135,9 @@ function displayQuestions()
             answer.textContent = questions[i][j];
         }
 
+        // Need to wait for user click before iterating outside for loop
+
         answerSelection();
-
-        if (answerSelection)
-        {
-            // Add score
-            score++;
-            console.log(score);
-            clearQuestion();
-        }
-
-        if (!answerSelection)
-        {
-            // Subtract time
-            timeLeft--;
-            console.log(score);
-            clearQuestion();
-        }
     }
 }
 
@@ -149,3 +156,116 @@ function startQuiz()
 startButtonEl.addEventListener("click", startQuiz);
 
 // init();
+
+/*
+    var flag;
+    
+    options[1].addEventListener("click", function()
+    {
+        flag = true;
+
+        console.log("Clicked");
+
+        if (flag)
+        {
+            // Add score
+            score++;
+            console.log("Score: " + score);
+            // clearQuestion();
+        }
+
+        
+        if (!flag)
+        {
+            // Subtract time
+            timeLeft--;
+            console.log("Score: " + score);
+            // clearQuestion();
+        }
+        
+
+        return true;
+    });
+    */
+
+// Wait for user click to continue
+
+        // var waitFlag = true;
+        
+        // var continueFlag = answerSelection();
+
+
+
+
+
+        /*
+        var selection = 0;
+
+        options[1].addEventListener("click", function()
+        {
+            console.log("Clicked: 1");
+    
+            selection = 1;
+
+            
+            score++;
+
+            clearQuestion();
+            
+
+            // return;
+        });
+
+        options[2].addEventListener("click", function()
+        {
+            console.log("Clicked: 2");
+    
+            selection = 2;
+
+            // return;
+        });
+
+        options[3].addEventListener("click", function()
+        {
+            console.log("Clicked: 3");
+    
+            selection = 3;
+
+            // return;
+        });
+
+        options[4].addEventListener("click", function()
+        {
+            console.log("Clicked: 4");
+    
+            selection = 4;
+
+            // return;
+        });
+        */
+        
+/*
+        if (selection === 1)
+        {
+            score++;
+            console.log("Score: " + score);
+            clearQuestion();
+        }
+        if (selection !== 1)
+        {
+            timeLeft--;
+            console.log("Score: " + score);
+            clearQuestion();
+        }
+*/
+
+        /*
+        do
+        {
+            if (continueFlag)
+            {
+                waitFlag = false;
+            }
+        }
+        while (waitFlag);
+        */
