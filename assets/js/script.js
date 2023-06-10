@@ -1,13 +1,25 @@
 // Global variables
 
 var welcomeMessageEl = document.querySelector("#welcome");
+
 var questionsFormEl = document.querySelector("#questions");
 var questionsContainerEl = document.querySelector("#questions-container");
-var highScoresEl = document.querySelector("#highscores");
+
+var highscoreEl = document.querySelector("#highscore");
+var highscoreButtonEl = document.querySelector("#highscore-button");
+var initialsEl = document.querySelector("#initials");
+var scoresEl = document.querySelector("#scores");
+var quizesCompletedEl = document.querySelector("#quizes-completed");
+var clearHighscoreEl = document.querySelector("#clear-highscore");
+var returnHighscoreEl = document.querySelector("#return-highscore");
+
+
 var initialsAndScoreEl = document.querySelector("#initials-and-score");
 var initialsFormEl = document.querySelector("#initials-form");
 var initialsInputEl = document.querySelector("#initials-input");
+
 var timerEl = document.querySelector("#timer");
+
 var startButtonEl = document.querySelector("#start-button");
 
 var questions = {
@@ -40,12 +52,58 @@ function init()
 {
     initialsAndScoreEl.hidden = true;
 
+    highscoreEl.hidden = true;
+
     // Runs start quiz function when user clicks start quiz button
     startButtonEl.addEventListener("click", startQuiz);
+
+    highscoreButtonEl.addEventListener("click", viewHighscore);
+}
+
+function viewHighscore()
+{
+    var quizResults = JSON.parse(localStorage.getItem("Initials and Score"));
+
+    if (quizResults === null)
+    {
+        // Message no scores recorded
+        window.alert("No quiz scores recorded");
+
+        return;
+    }
+
+    else
+    {
+        highscoreEl.hidden = false;
+        highscoreButtonEl.hidden = true;
+        console.log(quizResults.quizesTaken);
+        initialsEl.textContent = "Initials: " + quizResults.initials;
+        scoresEl.textContent = "Last quiz score: " + quizResults.score;
+        quizesCompletedEl.textContent = "Quiz taken: " + quizResults.quizesTaken + " times";
+
+        clearHighscoreEl.addEventListener("click", function()
+        {
+            // Delete local storage
+
+            localStorage.removeItem("Initials and Score");
+
+            highscoreEl.hidden = true;
+            highscoreButtonEl.hidden = false;
+
+            return;
+        });
+
+        returnHighscoreEl.addEventListener("click", function()
+        {
+            highscoreEl.hidden = true;
+            highscoreButtonEl.hidden = false;
+
+            return;
+        })
+    }
 }
 
 // Get quizes count
-
 function getQuizCount()
 {
     var lastQuiz = JSON.parse(localStorage.getItem("Initials and Score"));
@@ -57,7 +115,7 @@ function getQuizCount()
 
     else
     {
-        return lastQuiz.quizCount;
+        return parseInt(lastQuiz.quizesTaken);
     }
 }
 
@@ -78,17 +136,22 @@ function saveResults()
 
         var quizCount = getQuizCount();
 
+        // Increment number of times user has taken the quiz
+        quizCount++;
+
         var initialsAndScore = {
             initials: initialsInputEl.value.trim(),
             score: score,
-            quizCount: quizCount
+            quizesTaken: quizCount
         };
 
-        localStorage.setItem("Initials and Score " + quizCount, JSON.stringify(initialsAndScore));
+        localStorage.setItem("Initials and Score", JSON.stringify(initialsAndScore));
 
         initialsAndScoreEl.hidden = true;
 
         welcomeMessageEl.hidden = false;
+
+        location.reload();
     });
 }
 
@@ -96,6 +159,8 @@ function saveResults()
 function quizComplete()
 {
     // Message congradulations on completing the quiz
+
+    quizOver = true;
 
     saveResults();
 }
@@ -130,8 +195,12 @@ function answerSelection()
 {
     // Check answer
 
+    // console.log("Question count: " + questionCount);
+
     options[1].addEventListener("click", function()
         {
+            console.log("Question " + questions[questionCount][0] + " answer " + questions[questionCount][1]);
+
             // See if first option is correct answer
             if (questions[questionCount][1] === correctAnswer)
             {
@@ -147,6 +216,8 @@ function answerSelection()
             }
 
             console.log("Clicked: 1");
+
+            console.log("Question count: " + questionCount);
     
             questionCount++;
 
@@ -283,6 +354,9 @@ function startQuiz()
 
     startTimer();
     displayQuestions();
+
+    // To check if event listeners for clicking answer options needs to be run again
+    // Maybe not needed with location.reload()
     answerSelection();
 }
 
@@ -291,5 +365,18 @@ init();
 /* Current issues
 
 After initial quiz, second quiz is skipping questions
+    Question count is incrementing twice on second play
+    Fixed with reloading page after form submission
 
+*/
+
+/* To do
+    Highscore
+        Do I want to save multiple scores and show all or just show last score
+
+        Add messages
+
+        Add questions
+
+        CSS styling
 */
