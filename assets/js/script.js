@@ -22,15 +22,17 @@ var timerEl = document.querySelector("#timer");
 
 var startButtonEl = document.querySelector("#start-button");
 
+// Object holding questions and answer options
 var questions = {
-    0: ["Text1", "Option1", "Option2", "Option3", "Option4"],
-    1: ["Text2", "Option1", "Option2", "Option3", "Option4"],
-    2: ["Text3", "Option1", "Option2", "Option3", "Option4"],
-    3: ["Text4", "Option1", "Option2", "Option3", "Option4"],
-    4: ["Text5", "Option1", "Option2", "Option3", "Option4"]
+    0: ["Which method allows you to select an element from HTML?", "A) document.querySelector()", "B) document.element()", "C) document.value()", "D) HTML.element()"],
+    1: ["DOM stands for", "A) Document Object Mobile", "B) Documented Operations Model", "C) Document Object Model", "D) None of the above"],
+    2: ["Which method allows you to set the attributes of an HTML element?", "A) .setAttr()", "B) .setAttribute()", "C) .getAttribute()", "D) .selectAttribute()"],
+    3: ["Which function allows you to clear a time interval?", "A) clearInterval()", "B) stopInterval()", "C) clearTime()", "D) setInterval()"],
+    4: ["Which method allows you to add data to local storage?", "A) .localStorage()", "B) localStorage.addItem()", "C) localStorage.appendItem()", "D) localStorage.setItem()"]
 };
 
-var answers = ["Option1", "Option1", "Option1", "Option1", "Option1"];
+// Array holding correct answers
+var answers = ["A) document.querySelector()", "C) Document Object Model", "B) .setAttribute()", "A) clearInterval()", "D) localStorage.setItem()"];
 
 var options = {
     1: document.querySelector("#option1"),
@@ -78,7 +80,7 @@ function viewHighscore()
         highscoreButtonEl.hidden = true;
         console.log(quizResults.quizesTaken);
         initialsEl.textContent = "Initials: " + quizResults.initials;
-        scoresEl.textContent = "Last quiz score: " + quizResults.score;
+        scoresEl.textContent = "Last quiz score: " + quizResults.score + "%";
         quizesCompletedEl.textContent = "Quiz taken: " + quizResults.quizesTaken + " times";
 
         clearHighscoreEl.addEventListener("click", function()
@@ -160,7 +162,9 @@ function quizComplete()
 {
     // Message congradulations on completing the quiz
 
-    quizOver = true;
+    window.alert("Quiz complete");
+
+    // quizOver = true;
 
     saveResults();
 }
@@ -168,7 +172,7 @@ function quizComplete()
 // User ran out of time
 function noTimeLeft()
 {
-    // Message sorry you ran out of time
+    window.alert("Sorry, you ran out of time");
 
     quizComplete();
 }
@@ -204,15 +208,19 @@ function answerSelection()
             // See if first option is correct answer
             if (questions[questionCount][1] === correctAnswer)
             {
-                score++;
+                score += 20;
                 console.log("score: " + score);
                 // Display correct prompt
+                window.alert("Correct!");
+
                 // Can do this with setInterval and add text to p element and then remove after interval reaches 3 seconds
             }
             else
             {
                 timeLeft -= 20;
+
                 // Display incorrect prompt
+                window.alert("Incorrect");
             }
 
             console.log("Clicked: 1");
@@ -231,14 +239,18 @@ function answerSelection()
             // See if first option is correct answer
             if (questions[questionCount][2] === correctAnswer)
             {
-                score++;
+                score += 20;
                 console.log("score: " + score);
+
                 // Display correct prompt
+                window.alert("Correct!");
             }
             else
             {
                 timeLeft -= 20;
+
                 // Display incorrect prompt
+                window.alert("Incorrect");
             }
 
             console.log("Clicked: 2");
@@ -255,14 +267,18 @@ function answerSelection()
             // See if first option is correct answer
             if (questions[questionCount][3] === correctAnswer)
             {
-                score++;
+                score += 20;
                 console.log("score: " + score);
+
                 // Display correct prompt
+                window.alert("Correct!");
             }
             else
             {
                 timeLeft -= 20;
+
                 // Display incorrect prompt
+                window.alert("Incorrect");
             }
 
             console.log("Clicked: 3");
@@ -279,14 +295,18 @@ function answerSelection()
             // See if first option is correct answer
             if (questions[questionCount][4] === correctAnswer)
             {
-                score++;
+                score += 20;
                 console.log("score: " + score);
+
                 // Display correct prompt
+                window.alert("Correct!");
             }
             else
             {
                 timeLeft -= 20;
+
                 // Display incorrect prompt
+                window.alert("Incorrect");
             }
 
             console.log("Clicked: 4");
@@ -354,9 +374,6 @@ function startQuiz()
 
     startTimer();
     displayQuestions();
-
-    // To check if event listeners for clicking answer options needs to be run again
-    // Maybe not needed with location.reload()
     answerSelection();
 }
 
@@ -375,8 +392,6 @@ After initial quiz, second quiz is skipping questions
         Do I want to save multiple scores and show all or just show last score
 
         Add messages
-
-        Add questions
 
         CSS styling
 */
