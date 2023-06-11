@@ -4,12 +4,14 @@ var welcomeMessageEl = document.querySelector("#welcome");
 
 var questionsContainerEl = document.querySelector("#questions-container");
 var questionTextEl = document.querySelector("#question");
+var currentScoreEl = document.querySelector("#current-score");
 
-var highscoreEl = document.querySelector("#highscore");
+var highscoresEl = document.querySelector("#highscore");
+var highscoreDisplayEl = document.querySelector("#highscores-display");
 var highscoreButtonEl = document.querySelector("#highscore-button");
-var initialsEl = document.querySelector("#initials");
-var scoresEl = document.querySelector("#scores");
-var quizesCompletedEl = document.querySelector("#quizes-completed");
+// var initialsEl = document.querySelector("#initials");
+// var scoresEl = document.querySelector("#scores");
+// var quizesCompletedEl = document.querySelector("#quizes-completed");
 var clearHighscoreEl = document.querySelector("#clear-highscore");
 var returnHighscoreEl = document.querySelector("#return-highscore");
 
@@ -54,7 +56,7 @@ function init()
 {
     initialsAndScoreEl.hidden = true;
 
-    highscoreEl.hidden = true;
+    highscoresEl.hidden = true;
 
     // Runs start quiz function when user clicks start quiz button
     startButtonEl.addEventListener("click", startQuiz);
@@ -64,9 +66,9 @@ function init()
 
 function viewHighscore()
 {
-    var quizResults = JSON.parse(localStorage.getItem("Initials and Score"));
+    var quizCount = JSON.parse(localStorage.getItem("Quiz Count"));
 
-    if (quizResults === null)
+    if (quizCount === null)
     {
         // Message no scores recorded
         window.alert("No quiz scores recorded");
@@ -76,32 +78,52 @@ function viewHighscore()
 
     else
     {
-        highscoreEl.hidden = false;
+        startButtonEl.hidden = true;
+        highscoresEl.hidden = false;
         highscoreButtonEl.hidden = true;
-        console.log(quizResults.quizesTaken);
-        initialsEl.textContent = "Initials: " + quizResults.initials;
-        scoresEl.textContent = "Last quiz score: " + quizResults.score + "%";
-        quizesCompletedEl.textContent = "Quiz taken: " + quizResults.quizesTaken + " times";
+
+        for (var i = 1; i < quizCount + 1; i++)
+        {
+            var quizResults = JSON.parse(localStorage.getItem("Initials and Score " + i));
+
+            var initialsEl = document.createElement("div");
+            initialsEl.textContent = "Initials: " + quizResults.initials;
+            highscoreDisplayEl.appendChild(initialsEl);
+
+            var scoreEl = document.createElement("div");
+            scoreEl.textContent = "Score: " + quizResults.score + "%";
+            highscoreDisplayEl.appendChild(scoreEl);
+        }
+
+        
+        console.log(quizCount);
 
         clearHighscoreEl.addEventListener("click", function()
         {
             // Delete local storage
 
-            localStorage.removeItem("Initials and Score");
+            for (var i = 1; i < quizCount + 1; i++)
+            {
+                localStorage.removeItem("Initials and Score " + i);
+            }
 
-            highscoreEl.hidden = true;
+            localStorage.removeItem("Quiz Count");
+
+            highscoresEl.hidden = true;
             highscoreButtonEl.hidden = false;
+            startButtonEl.hidden = false;
 
             return;
         });
 
         returnHighscoreEl.addEventListener("click", function()
         {
-            highscoreEl.hidden = true;
+            highscoresEl.hidden = true;
             highscoreButtonEl.hidden = false;
+            startButtonEl.hidden = false;
 
             return;
-        })
+        });
     }
 }
 
@@ -110,17 +132,16 @@ function getQuizCount()
 {
     // var lastQuiz = JSON.parse(localStorage.getItem("Initials and Score"));
 
-    var lastQuiz = JSON.parse(localStorage.getItem("Quiz Count"));
+    var quizCount = JSON.parse(localStorage.getItem("Quiz Count"));
     
-    if (lastQuiz === null)
+    if (quizCount === null)
     {
         return 0;
     }
 
     else
     {
-        // return parseInt(lastQuiz.quizesTaken);
-        return parseInt(lastQuiz.quizCount);
+        return parseInt(quizCount);
     }
 }
 
@@ -146,11 +167,10 @@ function saveResults()
 
         var initialsAndScore = {
             initials: initialsInputEl.value.trim(),
-            score: score,
-            // quizesTaken: quizCount
+            score: score
         };
 
-        localStorage.setItem("Initials and Score", JSON.stringify(initialsAndScore));
+        localStorage.setItem("Initials and Score " + quizCount, JSON.stringify(initialsAndScore));
 
         localStorage.setItem("Quiz Count", JSON.stringify(quizCount));
 
@@ -170,6 +190,7 @@ function quizComplete()
     clearQuestion();
 
     window.alert("Quiz complete");
+    window.alert("Your score was: " + score + "%");
 
     // quizOver = true;
 
@@ -205,8 +226,6 @@ function startTimer()
 function answerSelection()
 {
     // Check answer
-
-    // console.log("Question count: " + questionCount);
 
     options[1].addEventListener("click", function()
         {
@@ -335,6 +354,8 @@ function clearQuestion()
     {
         options[i].textContent = "";
     }
+
+    currentScoreEl.textContent = "";
 }
 
 // Displays next question and ends quiz when all questions are answered
@@ -354,7 +375,7 @@ function displayQuestions()
 
     else
     {
-        // Targets first div
+        // Targets question display element
         questionTextEl.textContent = questions[questionCount][0];
 
         for (var i = 1; i < Object.keys(options).length + 1; i++)
@@ -365,6 +386,8 @@ function displayQuestions()
 
             answer.textContent = questions[questionCount][i];
         }
+
+        currentScoreEl.textContent = "Current score: " + score + "%";
 
         return;
     }
@@ -403,4 +426,6 @@ After initial quiz, second quiz is skipping questions
     Add messages
 
     Comments
+
+    Remove console logs
 */
