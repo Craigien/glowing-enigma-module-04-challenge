@@ -99,9 +99,6 @@ function viewHighscore()
             highscoreDisplayEl.appendChild(initialsScoreDisplayEl);
         }
 
-        
-        console.log(quizCount);
-
         clearHighscoreEl.addEventListener("click", function()
         {
             // Delete local storage
@@ -232,13 +229,10 @@ function answerSelection()
 
     options[1].addEventListener("click", function()
         {
-            console.log("Question " + questions[questionCount][0] + " answer " + questions[questionCount][1]);
-
             // See if first option is correct answer
             if (questions[questionCount][1] === correctAnswer)
             {
                 score += 20;
-                console.log("score: " + score);
 
                 // Display correct prompt
                 window.alert("Correct!");
@@ -251,10 +245,6 @@ function answerSelection()
                 window.alert("Incorrect");
             }
 
-            console.log("Clicked: 1");
-
-            console.log("Question count: " + questionCount);
-    
             questionCount++;
 
             clearQuestion();
@@ -268,7 +258,6 @@ function answerSelection()
             if (questions[questionCount][2] === correctAnswer)
             {
                 score += 20;
-                console.log("score: " + score);
 
                 // Display correct prompt
                 window.alert("Correct!");
@@ -280,8 +269,6 @@ function answerSelection()
                 // Display incorrect prompt
                 window.alert("Incorrect");
             }
-
-            console.log("Clicked: 2");
     
             questionCount++;
 
@@ -296,7 +283,6 @@ function answerSelection()
             if (questions[questionCount][3] === correctAnswer)
             {
                 score += 20;
-                console.log("score: " + score);
 
                 // Display correct prompt
                 window.alert("Correct!");
@@ -308,8 +294,6 @@ function answerSelection()
                 // Display incorrect prompt
                 window.alert("Incorrect");
             }
-
-            console.log("Clicked: 3");
 
             questionCount++;
 
@@ -324,7 +308,6 @@ function answerSelection()
             if (questions[questionCount][4] === correctAnswer)
             {
                 score += 20;
-                console.log("score: " + score);
 
                 // Display correct prompt
                 window.alert("Correct!");
@@ -336,8 +319,6 @@ function answerSelection()
                 // Display incorrect prompt
                 window.alert("Incorrect");
             }
-
-            console.log("Clicked: 4");
 
             questionCount++;
 
@@ -369,8 +350,6 @@ function displayQuestions()
     // Runs if all questions have been answered
     if (questionCount >= Object.keys(questions).length)
     {
-        console.log("Quiz complete");
-        console.log("Score " + score);
         quizComplete();
         return;
     }
@@ -384,8 +363,6 @@ function displayQuestions()
         // Displays question options by looping through array in questions object
         for (var i = 1; i < Object.keys(options).length + 1; i++)
         {
-            console.log(options[i]);
-
             var answer = options[i];
 
             answer.textContent = questions[questionCount][i];
@@ -416,24 +393,3 @@ function startQuiz()
 }
 
 init();
-
-/* Current issues
-
-After initial quiz, second quiz is skipping questions
-    Question count is incrementing twice on second play
-    Fixed with reloading page after form submission
-
-*/
-
-/* To do
-    Highscore
-        Do I want to save multiple scores and show all or just show last score
-
-        for loop to remove highscores using quizcount stored in local storage
-
-    Add messages
-
-    Comments
-
-    Remove console logs
-*/
