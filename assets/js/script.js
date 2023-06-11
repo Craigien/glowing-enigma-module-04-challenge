@@ -2,8 +2,8 @@
 
 var welcomeMessageEl = document.querySelector("#welcome");
 
-var questionsFormEl = document.querySelector("#questions");
 var questionsContainerEl = document.querySelector("#questions-container");
+var questionTextEl = document.querySelector("#question");
 
 var highscoreEl = document.querySelector("#highscore");
 var highscoreButtonEl = document.querySelector("#highscore-button");
@@ -18,17 +18,17 @@ var initialsAndScoreEl = document.querySelector("#initials-and-score");
 var initialsFormEl = document.querySelector("#initials-form");
 var initialsInputEl = document.querySelector("#initials-input");
 
-var timerEl = document.querySelector("#timer");
+var timerEl = document.querySelector("#time-left");
 
 var startButtonEl = document.querySelector("#start-button");
 
 // Object holding questions and answer options
 var questions = {
-    0: ["Which method allows you to select an element from HTML?", "A) document.querySelector()", "B) document.element()", "C) document.value()", "D) HTML.element()"],
-    1: ["DOM stands for", "A) Document Object Mobile", "B) Documented Operations Model", "C) Document Object Model", "D) None of the above"],
-    2: ["Which method allows you to set the attributes of an HTML element?", "A) .setAttr()", "B) .setAttribute()", "C) .getAttribute()", "D) .selectAttribute()"],
-    3: ["Which function allows you to clear a time interval?", "A) clearInterval()", "B) stopInterval()", "C) clearTime()", "D) setInterval()"],
-    4: ["Which method allows you to add data to local storage?", "A) .localStorage()", "B) localStorage.addItem()", "C) localStorage.appendItem()", "D) localStorage.setItem()"]
+    0: ["Question 1: Which method allows you to select an element from HTML?", "A) document.querySelector()", "B) document.element()", "C) document.value()", "D) HTML.element()"],
+    1: ["Question 2: DOM stands for", "A) Document Object Mobile", "B) Documented Operations Model", "C) Document Object Model", "D) None of the above"],
+    2: ["Question 3: Which method allows you to set the attributes of an HTML element?", "A) .setAttr()", "B) .setAttribute()", "C) .getAttribute()", "D) .selectAttribute()"],
+    3: ["Question 4: Which function allows you to clear a time interval?", "A) clearInterval()", "B) stopInterval()", "C) clearTime()", "D) setInterval()"],
+    4: ["Question 5: Which method allows you to add data to local storage?", "A) .localStorage()", "B) localStorage.addItem()", "C) localStorage.appendItem()", "D) localStorage.setItem()"]
 };
 
 // Array holding correct answers
@@ -108,7 +108,9 @@ function viewHighscore()
 // Get quizes count
 function getQuizCount()
 {
-    var lastQuiz = JSON.parse(localStorage.getItem("Initials and Score"));
+    // var lastQuiz = JSON.parse(localStorage.getItem("Initials and Score"));
+
+    var lastQuiz = JSON.parse(localStorage.getItem("Quiz Count"));
     
     if (lastQuiz === null)
     {
@@ -117,7 +119,8 @@ function getQuizCount()
 
     else
     {
-        return parseInt(lastQuiz.quizesTaken);
+        // return parseInt(lastQuiz.quizesTaken);
+        return parseInt(lastQuiz.quizCount);
     }
 }
 
@@ -144,10 +147,12 @@ function saveResults()
         var initialsAndScore = {
             initials: initialsInputEl.value.trim(),
             score: score,
-            quizesTaken: quizCount
+            // quizesTaken: quizCount
         };
 
         localStorage.setItem("Initials and Score", JSON.stringify(initialsAndScore));
+
+        localStorage.setItem("Quiz Count", JSON.stringify(quizCount));
 
         initialsAndScoreEl.hidden = true;
 
@@ -161,6 +166,8 @@ function saveResults()
 function quizComplete()
 {
     // Message congradulations on completing the quiz
+
+    clearQuestion();
 
     window.alert("Quiz complete");
 
@@ -183,7 +190,7 @@ function startTimer()
     timer = setInterval(function()
     {
         timeLeft--;
-        timerEl.textContent = timeLeft;
+        timerEl.textContent = timeLeft + " seconds left";
        
         if (timeLeft <= 0)
         {
@@ -322,7 +329,7 @@ function answerSelection()
 // Removes text of current question
 function clearQuestion()
 {
-    questionsContainerEl.children[0].textContent = "";
+    questionTextEl.textContent = "";
     
     for (var i = 1; i < Object.keys(questions).length; i++)
     {
@@ -340,7 +347,7 @@ function displayQuestions()
     {
         console.log("Quiz complete");
         console.log("Score " + score);
-        clearQuestion();
+        // clearQuestion();
         quizComplete();
         return;
     }
@@ -348,7 +355,7 @@ function displayQuestions()
     else
     {
         // Targets first div
-        questionsContainerEl.children[0].textContent = questions[questionCount][0];
+        questionTextEl.textContent = questions[questionCount][0];
 
         for (var i = 1; i < Object.keys(options).length + 1; i++)
         {
@@ -367,8 +374,8 @@ function displayQuestions()
 function startQuiz()
 {
     score = 0;
-    timeLeft = 300;
-    timerEl.textContent = timeLeft;
+    timeLeft = 120;
+    timerEl.textContent = timeLeft + " seconds left";
     welcomeMessageEl.hidden = true;
     questionCount = 0;
 
@@ -391,7 +398,9 @@ After initial quiz, second quiz is skipping questions
     Highscore
         Do I want to save multiple scores and show all or just show last score
 
-        Add messages
+        for loop to remove highscores using quizcount stored in local storage
 
-        CSS styling
+    Add messages
+
+    Comments
 */
