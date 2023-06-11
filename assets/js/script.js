@@ -1,27 +1,29 @@
 // Global variables
 
+// Contains welcome message
 var welcomeMessageEl = document.querySelector("#welcome");
 
+// Variables for questions and score
 var questionsContainerEl = document.querySelector("#questions-container");
 var questionTextEl = document.querySelector("#question");
 var currentScoreEl = document.querySelector("#current-score");
 
+// Variables for scores
 var highscoresEl = document.querySelector("#highscore");
 var highscoreDisplayEl = document.querySelector("#highscores-display");
 var highscoreButtonEl = document.querySelector("#highscore-button");
-// var initialsEl = document.querySelector("#initials");
-// var scoresEl = document.querySelector("#scores");
-// var quizesCompletedEl = document.querySelector("#quizes-completed");
 var clearHighscoreEl = document.querySelector("#clear-highscore");
 var returnHighscoreEl = document.querySelector("#return-highscore");
 
-
+// Variables for score form and initials input
 var initialsAndScoreEl = document.querySelector("#initials-and-score");
 var initialsFormEl = document.querySelector("#initials-form");
 var initialsInputEl = document.querySelector("#initials-input");
 
+// Variable to display timer
 var timerEl = document.querySelector("#time-left");
 
+// Variable for start button
 var startButtonEl = document.querySelector("#start-button");
 
 // Object holding questions and answer options
@@ -36,6 +38,7 @@ var questions = {
 // Array holding correct answers
 var answers = ["A) document.querySelector()", "C) Document Object Model", "B) .setAttribute()", "A) clearInterval()", "D) localStorage.setItem()"];
 
+// Object to create variables for answer option elements
 var options = {
     1: document.querySelector("#option1"),
     2: document.querySelector("#option2"),
@@ -43,8 +46,10 @@ var options = {
     4: document.querySelector("#option4")
 };
 
+// Variables for timer
 var timer;
 var timeLeft = 0;
+// Variable to keep track of score
 var score;
 // Tracks which question user is on
 var questionCount;
@@ -64,17 +69,20 @@ function init()
     highscoreButtonEl.addEventListener("click", viewHighscore);
 }
 
+// Shows user highscores
 function viewHighscore()
 {
     var quizCount = JSON.parse(localStorage.getItem("Quiz Count"));
 
+    // Runs if no scores are recorded
     if (quizCount === null)
     {
-        // Message no scores recorded
+        // Informs user that there are no scores recorded
         window.alert("No quiz scores recorded");
 
         return;
     }
+
 
     else
     {
@@ -86,13 +94,9 @@ function viewHighscore()
         {
             var quizResults = JSON.parse(localStorage.getItem("Initials and Score " + i));
 
-            var initialsEl = document.createElement("div");
-            initialsEl.textContent = "Initials: " + quizResults.initials;
-            highscoreDisplayEl.appendChild(initialsEl);
-
-            var scoreEl = document.createElement("div");
-            scoreEl.textContent = "Score: " + quizResults.score + "%";
-            highscoreDisplayEl.appendChild(scoreEl);
+            var initialsScoreDisplayEl = document.createElement("div");
+            initialsScoreDisplayEl.textContent = "Initials: " + quizResults.initials + " - Score: " + quizResults.score + "%";
+            highscoreDisplayEl.appendChild(initialsScoreDisplayEl);
         }
 
         
@@ -121,6 +125,8 @@ function viewHighscore()
             highscoresEl.hidden = true;
             highscoreButtonEl.hidden = false;
             startButtonEl.hidden = false;
+
+            location.reload();
 
             return;
         });
@@ -170,12 +176,13 @@ function saveResults()
             score: score
         };
 
+        // Add initials and score to local storage
         localStorage.setItem("Initials and Score " + quizCount, JSON.stringify(initialsAndScore));
 
+        // Add quiz attempt number to local storage
         localStorage.setItem("Quiz Count", JSON.stringify(quizCount));
 
         initialsAndScoreEl.hidden = true;
-
         welcomeMessageEl.hidden = false;
 
         location.reload();
@@ -185,14 +192,10 @@ function saveResults()
 // User completed quiz
 function quizComplete()
 {
-    // Message congradulations on completing the quiz
-
     clearQuestion();
 
     window.alert("Quiz complete");
     window.alert("Your score was: " + score + "%");
-
-    // quizOver = true;
 
     saveResults();
 }
@@ -225,7 +228,7 @@ function startTimer()
 // Event listeners to listen for clicks on multiple choice answer options
 function answerSelection()
 {
-    // Check answer
+    // Check selected answer
 
     options[1].addEventListener("click", function()
         {
@@ -236,10 +239,9 @@ function answerSelection()
             {
                 score += 20;
                 console.log("score: " + score);
+
                 // Display correct prompt
                 window.alert("Correct!");
-
-                // Can do this with setInterval and add text to p element and then remove after interval reaches 3 seconds
             }
             else
             {
@@ -262,7 +264,7 @@ function answerSelection()
 
         options[2].addEventListener("click", function()
         {
-            // See if first option is correct answer
+            // See if second option is correct answer
             if (questions[questionCount][2] === correctAnswer)
             {
                 score += 20;
@@ -290,7 +292,7 @@ function answerSelection()
 
         options[3].addEventListener("click", function()
         {
-            // See if first option is correct answer
+            // See if third option is correct answer
             if (questions[questionCount][3] === correctAnswer)
             {
                 score += 20;
@@ -318,7 +320,7 @@ function answerSelection()
 
         options[4].addEventListener("click", function()
         {
-            // See if first option is correct answer
+            // See if fourth option is correct answer
             if (questions[questionCount][4] === correctAnswer)
             {
                 score += 20;
@@ -364,20 +366,22 @@ function displayQuestions()
     // Correct answer for current question
     correctAnswer = answers[questionCount];
 
+    // Runs if all questions have been answered
     if (questionCount >= Object.keys(questions).length)
     {
         console.log("Quiz complete");
         console.log("Score " + score);
-        // clearQuestion();
         quizComplete();
         return;
     }
 
+    // Displays next question
     else
     {
         // Targets question display element
         questionTextEl.textContent = questions[questionCount][0];
 
+        // Displays question options by looping through array in questions object
         for (var i = 1; i < Object.keys(options).length + 1; i++)
         {
             console.log(options[i]);
@@ -396,12 +400,16 @@ function displayQuestions()
 // Starts quiz
 function startQuiz()
 {
+    // Sets score, timer, and question count
     score = 0;
     timeLeft = 120;
     timerEl.textContent = timeLeft + " seconds left";
-    welcomeMessageEl.hidden = true;
     questionCount = 0;
 
+    // Hides welcome message
+    welcomeMessageEl.hidden = true;
+    
+    // Call functions that start quiz
     startTimer();
     displayQuestions();
     answerSelection();
